@@ -1,0 +1,15 @@
+BEGIN TRANSACTION;
+SET CONSTRAINTS ALL DEFERRED;
+CREATE TABLE "position"("id" SERIAL PRIMARY KEY,"name" VARCHAR NOT NULL);
+INSERT INTO "position" VALUES(1, 'professor');
+INSERT INTO "position" VALUES(2, 'lecturer');
+INSERT INTO "position" VALUES(3, 'assistant');
+CREATE TABLE "unit"("id" SERIAL PRIMARY KEY,"name" VARCHAR NOT NULL);
+INSERT INTO "unit" VALUES(1, 'distributed systems');
+INSERT INTO "unit" VALUES(2, 'expert systems');
+INSERT INTO "unit" VALUES(3, 'algorithms');
+CREATE TABLE "employee"("id" SERIAL PRIMARY KEY,"name" VARCHAR NOT NULL,"salary" REAL NOT NULL,"employed_from" TIMESTAMP NOT NULL,"position" INTEGER NOT NULL REFERENCES "position","unit" INTEGER NOT NULL REFERENCES "unit");
+INSERT INTO "employee" VALUES(1, 'smith',1000.0,'2011-11-19',1,1);
+INSERT INTO "employee" VALUES(2, 'anderson',3000.0,'2009-01-04',2,2);
+INSERT INTO "employee" VALUES(3, 'jameson',5000.0,'2012-04-15',3,3);
+COMMIT;
