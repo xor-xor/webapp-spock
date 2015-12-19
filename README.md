@@ -1,4 +1,4 @@
-# webapp_scotty
+# webapp_spock
 
 This is a Haskell version of
 [webapp_flask](https://github.com/xor-xor/webapp_flask) that I wrote
