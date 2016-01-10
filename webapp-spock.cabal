@@ -1,0 +1,55 @@
+name:                webapp-spock
+version:             0.1.0.0
+synopsis:            A simple webapp written in Haskell with Spock framework.
+description:         Please see README.md
+homepage:            http://github.com/xor-xor/webapp-spock
+category:            Web
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     App
+  build-depends:       base >= 4.7 && < 5
+                     , Spock
+                     , lucid
+                     , postgresql-simple
+                     , wai-middleware-static
+                     , configurator
+                     , text
+                     , time
+                     , http-types
+                     , wai
+                     , wai-extra
+                     -- why ghc-mod complains if I omit these three packages below?
+                     , bytestring
+                     , hspec
+                     , hspec-wai
+  default-language:    Haskell2010
+
+executable webapp-spock-exe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -O2 -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , webapp-spock
+  default-language:    Haskell2010
+
+test-suite webapp-spock-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , webapp-spock
+                     , hspec
+                     , hspec-wai
+                     , bytestring
+                     , http-types
+                     , wai-extra
+  -- ghc-options:         -threaded -O2 -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/xor-xor/webapp-spock

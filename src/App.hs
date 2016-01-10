@@ -2,7 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
-module Main where
+module App (runApp, appToTest) where
 
 import Control.Monad (when)
 import qualified Data.Configurator as C
@@ -26,12 +26,12 @@ import qualified Database.PostgreSQL.Simple.FromRow as Pg
 -- Types, instances etc.
 
 data AppCfg = AppCfg
-    { cfgDbName :: String
-    , cfgDbUser :: String
-    , cfgDbPassword :: String
-    , cfgAppUser :: Text
+    { cfgDbName      :: String
+    , cfgDbUser      :: String
+    , cfgDbPassword  :: String
+    , cfgAppUser     :: Text
     , cfgAppPassword :: Text
-    , cfgAppPort :: Int
+    , cfgAppPort     :: Int
     } deriving (Show)
 
 data AppState = AppState
@@ -141,8 +141,8 @@ getDbConn appCfg = PCConn (ConnBuilder createConn destroyConn poolCfg)
 -------------------------------------------------------------------------------
 -- Main, definitions of routes etc.
 
-main :: IO ()
-main = do
+runApp :: IO ()
+runApp = do
   c <- parseConfig "app.cfg"
   runSpock (cfgAppPort c) (middleware' c)
       where middleware' cfg = spock (getSpockCfg cfg) app
@@ -160,10 +160,18 @@ app = do
   get "/health" healthCheck
 
 -- | Same as @app@, used only for tests with Hspec.
-appToTest :: IO Application
-appToTest = do
+appToTest :: String -> String -> IO Application
+appToTest testUser testPassword = do
   appCfg <- parseConfig "app.cfg"
-  spockAsApp $ spock (getSpockCfg appCfg) app
+  -- XXX I really don't like this boilerplate below
+  let testAppCfg = AppCfg { cfgDbName      = cfgDbName appCfg
+                          , cfgDbUser      = cfgDbUser appCfg
+                          , cfgDbPassword  = cfgDbPassword appCfg
+                          , cfgAppUser     = pack testUser
+                          , cfgAppPassword = pack testPassword
+                          , cfgAppPort     = cfgAppPort appCfg
+                          }
+  spockAsApp $ spock (getSpockCfg testAppCfg) app
 
 
 -------------------------------------------------------------------------------
