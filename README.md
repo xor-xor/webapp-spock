@@ -18,7 +18,9 @@ first, though).
 This app uses `stack` for fetching dependencies, building binaries,
 testing and executing them - please refer to
 [Stack's docs](http://docs.haskellstack.org/en/stable/README.html) if
-you are not familiar with this tool.
+you are not familiar with this tool. Remember to set correct paths for
+`postgresql` and `zlib` libs/headers in `stack.yaml`
+(with `extra-include-dirs` and `extra-lib-dirs`)!
 
 After setting everything up , you just need to edit `app.cfg` file and
 fill it with credentials for your database and this app. By default,
